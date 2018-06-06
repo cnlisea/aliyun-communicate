@@ -11,7 +11,6 @@ import (
 	"encoding/base32"
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"net/url"
 	"sort"
 	"strings"
@@ -61,12 +60,10 @@ func (req *ALiYunCommunicationRequest) SetParamsValue(accessKeyId, phoneNumbers,
 		return err
 	}
 	req.Timestamp = now.In(local).Format("2006-01-02T15:04:05Z")
-	fmt.Println("time:", req.Timestamp)
 	req.Format = "json"
 	req.SignatureMethod = "HMAC-SHA1"
 	req.SignatureVersion = "1.0"
 	req.SignatureNonce = NewId()
-	fmt.Println("req.SignatureNonce:", req.SignatureNonce)
 
 	req.Action = "SendSms"
 	req.Version = "2017-05-25"
@@ -131,8 +128,6 @@ func (req *ALiYunCommunicationRequest) BuildSmsRequestEndpoint(accessKeySecret, 
 	businessParams["OutId"] = req.OutId
 	// generate signature and sorted  query
 	sortQueryString, signature := generateQueryStringAndSignature(businessParams, systemParams, accessKeySecret)
-	fmt.Println("Signature:", signature)
-	fmt.Println("sortQueryString:", sortQueryString)
 	return gatewayUrl + "?Signature=" + signature + sortQueryString, nil
 }
 
